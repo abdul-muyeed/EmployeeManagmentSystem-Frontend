@@ -1,0 +1,11 @@
+.rows:nth-child(odd) {
+  background-color: #f2f2f2;
+}
+.rows:hover {
+  background-color: #ddd;
+}
+
+.rows > td {
+  padding: 8px;
+}
+
