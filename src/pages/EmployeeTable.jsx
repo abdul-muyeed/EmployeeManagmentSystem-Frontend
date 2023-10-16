@@ -1,57 +1,66 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {FaSort} from 'react-icons/fa'
-export default function EmployeeTable() {
+import EmployeeData from './EmployeeData'
+export default function EmployeeTable() {  
     const [ageSort, setAgeSort] = useState(false)
     const [nameSort, setNameSort] = useState(false)
     const [positionSort, setPositionSort] = useState(false)
     const [deptSort, setdeptSort] = useState(false)
     const [dateSort, setDateSort] = useState(false)
     const [salarySort, setSalarySort] = useState(false)
-    const [tableData,setTableData]  = useState([
-        {
-            firstName: "Alice",
-            LastName: "Smith",
-            age: 35,
-            position: "Data Analyst",
-            email: "alice.smith@example.com",
-            phone: "987-654-3210",
-            address: "456 Elm St, Townsville",
-            image: "alice-smith.jpg",
-            department: "Analytics",
-            joiningDate: "2021-08-20",
-            salary: 72000,
-            skills: ["Python", "SQL", "Data Visualization"],
-            education: [
-                            {
-                                degree: "Master's in Statistics",
-                                university: "XYZ University",
-                                graduationYear: 2019
-                            }
-                        ]
-        },
-        {
-            firstName: "Bob",
-            lastName: "Johnson",
-            age: 29,
-            position: "Software Developer",
-            email: "bob.johnson@example.com",
-            phone: "555-123-4567",
-            address: "789 Oak St, Citytown",
-            image: "bob-johnson.jpg",
-            department: "Engineering",
-            joiningDate: "2022-03-10",
-            salary: 95000,
-            skills: ["Java", "Spring Boot", "Ruby on Rails"],
-            education: [
-                            {
-                                degree: "Bachelor's in Computer Science",
-                                university: "ABC University",
-                                graduationYear: 2015
-                            }
-                        ]
-        }
+    // const [tableData,setTableData]  = useState([
+    //     {
+    //         firstName: "Alice",
+    //         LastName: "Smith",
+    //         age: 35,
+    //         position: "Data Analyst",
+    //         email: "alice.smith@example.com",
+    //         phone: "987-654-3210",
+    //         address: "456 Elm St, Townsville",
+    //         image: "alice-smith.jpg",
+    //         department: "Analytics",
+    //         joiningDate: "2021-08-20",
+    //         salary: 72000,
+    //         skills: ["Python", "SQL", "Data Visualization"],
+    //         education: [
+    //                         {
+    //                             degree: "Master's in Statistics",
+    //                             university: "XYZ University",
+    //                             graduationYear: 2019
+    //                         }
+    //                     ]
+    //     },
+    //     {
+    //         firstName: "Bob",
+    //         lastName: "Johnson",
+    //         age: 29,
+    //         position: "Software Developer",
+    //         email: "bob.johnson@example.com",
+    //         phone: "555-123-4567",
+    //         address: "789 Oak St, Citytown",
+    //         image: "bob-johnson.jpg",
+    //         department: "Engineering",
+    //         joiningDate: "2022-03-10",
+    //         salary: 95000,
+    //         skills: ["Java", "Spring Boot", "Ruby on Rails"],
+    //         education: [
+    //                         {
+    //                             degree: "Bachelor's in Computer Science",
+    //                             university: "ABC University",
+    //                             graduationYear: 2015
+    //                         }
+    //                     ]
+    //     }
 
-    ])
+    // ])
+    const [tableData, setTableData] = useState([])
+    
+    const getEmployeeData = async () => {
+        let data = await EmployeeData()
+        setTableData(data)
+    }
+
+    
     
     
     function handleSort(e) {
@@ -89,7 +98,9 @@ export default function EmployeeTable() {
 
         setTableData([...tableData])
     }
-    
+    useEffect(() => {
+        getEmployeeData()
+    }, [])
   return (
     <>
       
@@ -128,7 +139,7 @@ export default function EmployeeTable() {
                 tableData.map((item, index) =>{
                     return (
                         <tr key={index} className=" text-center rows">
-                            <td >{item.firstName + item.lastName}</td>
+                            <td >{item.firstName +' '+ item.lastName}</td>
                             <td >{item.age}</td>
                             <td >{item.position}</td>
                             <td >{item.department}</td>
