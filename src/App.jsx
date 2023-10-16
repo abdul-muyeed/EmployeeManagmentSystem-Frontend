@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
-import  Home  from './pages/Home'
+import  Employeetable from './pages/EmployeeTable'
 import HomeLayout from './pages/HomeLayout'
+import Dashboard from './pages/Dashboard'
 
 function App() {
 
@@ -8,7 +9,8 @@ function App() {
     <>
     <Routes>
       <Route path="/" element={<HomeLayout />} >
-        <Route index element={<Home />} />
+        <Route index element={<Dashboard/>} />
+        <Route path='table' element={<Employeetable/>} />
 
       </Route>
       

@@ -1,9 +1,9 @@
-import { Outlet } from "react-router-dom"
+import { Link, Outlet } from "react-router-dom"
 
 export default function HomeLayout() {
     const navItems = [
         { name: 'Home', path: '/' },
-        { name: 'Employees', path: '/employees' },
+        { name: 'Employees', path: '/table' },
         { name: 'Departments', path: '/departments' },
         { name: 'Roles', path: '/roles' },
     ]
@@ -21,7 +21,7 @@ export default function HomeLayout() {
                             <ul className="text-white text-center pt-2">
                                 {
                                     navItems.map((item, index) => {
-                                        return(<li key={index} className=" py-2 hover:text-blue-200 hover:underline"><a href={item.path}>{item.name}</a></li>)
+                                        return(<li key={index} className=" py-2 hover:text-blue-200 hover:underline"><Link to={item.path}>{item.name}</Link></li>)
 
                                     })
                                 }
@@ -29,7 +29,10 @@ export default function HomeLayout() {
                         </nav>
                     </div>
                     <section className="w-5/6 bg-gray-100">
-                        <Outlet />
+                    <div className="w-full  px-2 flex justify-start items-center">
+                    <Outlet />
+                    </div>
+                       
                     </section>
                 </div>
             </section>
