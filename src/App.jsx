@@ -10,7 +10,10 @@ function App() {
     <Routes>
       <Route path="/" element={<HomeLayout />} >
         <Route index element={<Dashboard/>} />
-        <Route path='table' element={<Employeetable/>} />
+        <Route path='table/' element={<Employeetable/>} >
+          <Route path=':page' element={<Employeetable/>} />
+        </Route>
+
 
       </Route>
       

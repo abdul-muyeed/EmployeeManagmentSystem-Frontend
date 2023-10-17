@@ -9,6 +9,7 @@ import EmployeeData from "./EmployeeData";
 export default function Dashboard() {
   const [rows, setRows] = useState([]);
   const [cols, setCols] = useState([]);
+  const [Agecols, setAgeCols] = useState([]);
   const [employeeData, setEmployeeData] = useState([]);
   const [age, setAge] = useState(0);
   const [salary, setSalary] = useState(0);
@@ -23,6 +24,8 @@ export default function Dashboard() {
 
     let row = data.map((item) => item.firstName+" "+item.lastName);
     let col = data.map((item) => item.salary);
+    let agecol = data.map((item) => item.age);
+    setAgeCols(agecol);
     setRows(row);
     setCols(col);
   };
@@ -32,7 +35,7 @@ export default function Dashboard() {
   console.log(rows, cols);
   return (
     <section className="w-full">
-      <div className="p-8 m-5 w-fit border rounded shadow-lg bg-white">
+      <div className="p-8 m-5 dashbox border rounded shadow-lg bg-white">
         <h1 className="text-center my-3 font-semibold text-2xl mb-5 ">Dashboard</h1>
         <div className="flex space-x-20">
             <div className="flex flex-col justify-center items-center bg-green-600 py-7 px-10 gap-2 rounded-lg shadow-lg text-white">
@@ -49,7 +52,25 @@ export default function Dashboard() {
             </div>
         </div>
       </div>
-      <div className="p-8 m-5 w-fit border rounded shadow-lg bg-white">
+      <div className="p-8 m-5 dashbox border rounded shadow-lg bg-white">
+        <div className="w-[800px] h-96 flex justify-center items-center">
+          <BarChart  chartData={
+            {
+              labels: rows,
+              datasets: [
+                {
+                  label: "Salary",
+                  data: cols,
+                  backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
+                  borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
+                  borderWidth: 1,
+                },
+              ],
+            }
+          } />
+        </div>
+      </div>
+      <div className="p-8 m-5 dashbox border rounded shadow-lg bg-white">
         <div className="w-[800px] h-96 flex justify-center items-center">
           <BarChart  chartData={
             {
@@ -57,7 +78,7 @@ export default function Dashboard() {
               datasets: [
                 {
                   label: "Age",
-                  data: cols,
+                  data: Agecols,
                   backgroundColor: ["rgba(255, 99, 132, 0.2)", "rgba(54, 162, 235, 0.2)"],
                   borderColor: ["rgba(255, 99, 132, 1)", "rgba(54, 162, 235, 1)"],
                   borderWidth: 1,

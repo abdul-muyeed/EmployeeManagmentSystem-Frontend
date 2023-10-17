@@ -8,4 +8,10 @@
 .rows > td {
   padding: 8px;
 }
+.dashbox{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
