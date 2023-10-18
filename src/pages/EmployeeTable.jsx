@@ -5,60 +5,16 @@ import { Link, useParams } from 'react-router-dom'
 export default function EmployeeTable() {  
     let {page} = useParams()
     page === undefined ? page = 0 : page--
-    console.log(page)
     const [ageSort, setAgeSort] = useState(false)
     const [nameSort, setNameSort] = useState(false)
     const [positionSort, setPositionSort] = useState(false)
     const [deptSort, setdeptSort] = useState(false)
     const [dateSort, setDateSort] = useState(false)
     const [salarySort, setSalarySort] = useState(false)
-    // const [tableData,setTableData]  = useState([
-    //     {
-    //         firstName: "Alice",
-    //         LastName: "Smith",
-    //         age: 35,
-    //         position: "Data Analyst",
-    //         email: "alice.smith@example.com",
-    //         phone: "987-654-3210",
-    //         address: "456 Elm St, Townsville",
-    //         image: "alice-smith.jpg",
-    //         department: "Analytics",
-    //         joiningDate: "2021-08-20",
-    //         salary: 72000,
-    //         skills: ["Python", "SQL", "Data Visualization"],
-    //         education: [
-    //                         {
-    //                             degree: "Master's in Statistics",
-    //                             university: "XYZ University",
-    //                             graduationYear: 2019
-    //                         }
-    //                     ]
-    //     },
-    //     {
-    //         firstName: "Bob",
-    //         lastName: "Johnson",
-    //         age: 29,
-    //         position: "Software Developer",
-    //         email: "bob.johnson@example.com",
-    //         phone: "555-123-4567",
-    //         address: "789 Oak St, Citytown",
-    //         image: "bob-johnson.jpg",
-    //         department: "Engineering",
-    //         joiningDate: "2022-03-10",
-    //         salary: 95000,
-    //         skills: ["Java", "Spring Boot", "Ruby on Rails"],
-    //         education: [
-    //                         {
-    //                             degree: "Bachelor's in Computer Science",
-    //                             university: "ABC University",
-    //                             graduationYear: 2015
-    //                         }
-    //                     ]
-    //     }
-
-    // ])
     const [tableData, setTableData] = useState([])
     const [tableData1, setTableData1] = useState([])
+    const departmens = ['IT', 'HR', 'Sales', 'Marketing', 'Engineering']
+    const positions = ['Web Developer', 'Team Lead', 'Senior Developer', 'Junior Developer', 'Intern']
     
     const getEmployeeData = async () => {
         let data = await EmployeeData()
@@ -71,7 +27,6 @@ export default function EmployeeTable() {
     
     function handleSort(e) {
         const index = e.target.id
-        console.log(e.target)
         
         console.log(index)
         
@@ -108,33 +63,61 @@ export default function EmployeeTable() {
         getEmployeeData()
     }, [])
     
-    const handleSearch = (e) =>{
+    const handlefilter = () =>{
+        let search = document.getElementById('search').value
+        let department = document.getElementById('department').value
+        let position = document.getElementById('postion').value
+        console.log(search,department,position)
+
         let data = tableData.filter(item =>{
-            if(item.firstName.toLowerCase().includes(e.target.value)|| item.age.toString().toLowerCase().includes(e.target.value) || item.lastName.toLowerCase().includes(e.target.value) || item.position.toLowerCase().includes(e.target.value) || item.department.toLowerCase().includes(e.target.value) || item.joiningDate.toLowerCase().includes(e.target.value) || item.salary.toString().includes(e.target.value)){
-                return item
+            let name = item.firstName +' '+ item.lastName
+            if(name.toLowerCase().includes(search)){
+                if(item.department.includes(department) && item.position.includes(position)){
+                    return item
+                }
+                
             }
         })
 
         setTableData1([...data])
 
     }
-    console.log(tableData1)
   return (
     <>
-      
-
-
-
-
-
 
 <div className="p-8 m-5 w-fit  border rounded shadow-lg bg-white">
 
         <h1 className="text-lg text-center text-slate-800 font-semibold">Employee Data Table</h1>
-        <div className="text-right my-3 mx-1 space-x-1">
+        <div className="flex justify-between  my-3 mx-1 ">
+            <div className='flex gap-x-3'>
+            <div className="">
+                        <select onChange={handlefilter} className="bg-gray-100 border text-center border-gray-300 py-1 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500   outline-none shadow-sm" id="department">
+                            <option value="">Department</option>
+                            {
+                                departmens.map((item,index)=>{
+                                    return <option key={index} value={item}>{item}</option>
+                                })
+                            }
+                        </select>
+                    </div>
+                    <div className="">
+                        <select onChange={handlefilter} className="bg-gray-100 border text-center border-gray-300 py-1 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500   outline-none shadow-sm" id="postion">
+                            <option value="">Position</option>
+                            {
+                                positions.map((item,index)=>{
+                                    return <option key={index} value={item}>{item}</option>
+                                })
+                            }
+                        </select>
+                    </div>
+            </div>
+                    
+                    <div>
+                        <span>Search: </span>
+                        <input onChange={handlefilter} id='search' type="text" className="bg-gray-100 p-1 outline-blue-100" />
+                    </div>
             
-            <span>Search: </span>
-            <input onChange={handleSearch} type="text" className="bg-gray-100 p-1 outline-blue-100" />
+            
             
         </div>
 
@@ -164,7 +147,11 @@ export default function EmployeeTable() {
                             <td >{item.department}</td>
                             <td >{item.joiningDate}</td>
                             <td >   {item.salary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
-                            <td ><button>Edit</button><button>Delete</button></td>
+                            <td  className='space-x-2'>
+                                <button className="border border-green-500 bg-green-500 text-white rounded-md px-2 py-1 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">Edit</button>
+                                
+                                <button className="border border-red-500 bg-red-500 text-white rounded-md px-2 py-1 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">Delete</button>
+                            </td>
                         </tr>
                     )
                 } )
@@ -179,11 +166,10 @@ export default function EmployeeTable() {
         </div>
         <div className='space-x-3'>
             <Link to={'/table/1'} className='p-2 bg-blue-400 rounded'><span>First</span></Link>
-            
-            <Link to={'/table/2'} className='p-2 bg-blue-400 rounded'><span>Pre</span></Link>
-            <Link to={'/table/3'} className='p-2 bg-blue-400 rounded'><span>1</span></Link>
-            <Link to={'/table/4'} className='p-2 bg-blue-400 rounded'><span>Next</span></Link>
-            <Link to={'/table/5'} className='p-2 bg-blue-400 rounded'><span>Last</span></Link>
+            {page !== 0 && <Link to={`/table/${page}`} className='p-2 bg-blue-400 rounded'><span>Pre</span></Link>}
+            <Link to={`/table/${page+1}`} className='p-2 bg-blue-400 rounded'><span>{page+1}</span></Link>
+            {page < Math.floor(tableData1.length/5) && <Link to={`/table/${page+2}`} className='p-2 bg-blue-400 rounded'><span>Next</span></Link>}
+            <Link to={`/table/${Math.ceil(tableData1.length/5)}`} className='p-2 bg-blue-400 rounded'><span>Last</span></Link>
         </div>
         <div>
         <Link to='/add'><button className='bg-blue-500 text-white p-2 rounded'>Add Employee</button></Link>
