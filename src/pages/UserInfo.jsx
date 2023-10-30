@@ -1,18 +1,20 @@
-import { useEffect, useState } from "react"
-import User from "./User"
+// import { useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import useEmployeeInfo from "./useEmployeeInfo"
 
 export default function UserInfo() {
-    const [userData, setUserData] = useState([])
-    const getUser = async () => {
-        setUserData(await User())
-         
-    }
-    useEffect(() => {
-        getUser()
-    }, [])
+    const {id} = useParams()
+    console.log(id)
+    // const [userData,setUserData] = useState()
+    const {userData,loading} = useEmployeeInfo(id)
     
-    const {firstName, lastName, age, position, department, joiningDate, salary,email, phone,address,skills, education} = userData
+    
+    
+    
 
+    if(loading) return <h1>Loading...</h1>
+
+    const {firstName, lastName, age, position, department, joiningDate, salary,email, phone,address,skills, education} = userData
     return (
         <>
         <div className="w-full">

@@ -1,26 +1,28 @@
 import { useEffect, useState } from 'react'
 import {FaSort} from 'react-icons/fa'
-import EmployeeData from './EmployeeData'
-import { Link, useParams } from 'react-router-dom'
+
+import { Link} from 'react-router-dom'
+import useEmployee from './useEmployee'
 export default function EmployeeTable() {  
-    let {page} = useParams()
-    page === undefined ? page = 0 : page--
+    
+
+
+    const [page, setPage] = useState(0)
+    const {employees, loading} = useEmployee()
     const [ageSort, setAgeSort] = useState(false)
     const [nameSort, setNameSort] = useState(false)
     const [positionSort, setPositionSort] = useState(false)
     const [deptSort, setdeptSort] = useState(false)
     const [dateSort, setDateSort] = useState(false)
     const [salarySort, setSalarySort] = useState(false)
-    const [tableData, setTableData] = useState([])
+    const [done, setDone] = useState(true)
+    
+    const [tableData,setTableData] = useState([])
     const [tableData1, setTableData1] = useState([])
     const departmens = ['IT', 'HR', 'Sales', 'Marketing', 'Engineering']
     const positions = ['Web Developer', 'Team Lead', 'Senior Developer', 'Junior Developer', 'Intern']
     
-    const getEmployeeData = async () => {
-        let data = await EmployeeData()
-        setTableData(data)
-        setTableData1(data)
-    }
+    
 
     
     
@@ -59,9 +61,6 @@ export default function EmployeeTable() {
 
         setTableData1([...tableData])
     }
-    useEffect(() => {
-        getEmployeeData()
-    }, [])
     
     const handlefilter = () =>{
         let search = document.getElementById('search').value
@@ -82,6 +81,27 @@ export default function EmployeeTable() {
         setTableData1([...data])
 
     }
+    
+    
+    useEffect(() => {
+        if(employees){
+        setTableData([...employees])
+        setTableData1([...employees])
+        }
+    }, [employees])  
+    
+
+    if(loading) return <h1>Loading...</h1>
+    
+        
+
+    
+
+    
+    
+    
+    
+    
   return (
     <>
 
@@ -91,6 +111,7 @@ export default function EmployeeTable() {
         <div className="flex justify-between  my-3 mx-1 ">
             <div className='flex gap-x-3'>
             <div className="">
+                <span className='mr-2'>Filter By :</span>
                         <select onChange={handlefilter} className="bg-gray-100 border text-center border-gray-300 py-1 text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500   outline-none shadow-sm" id="department">
                             <option value="">Department</option>
                             {
@@ -125,6 +146,7 @@ export default function EmployeeTable() {
     <table>
         <thead className="border-b border-gray-800">
             <tr >
+                
             <th onClick={handleSort}  className="p-2 cursor-pointer"  ><span className='flex justify-center items-center gap-3' id='0'>Name<FaSort size={12} color='gray'/> </span></th>
             <th onClick={handleSort}  className="p-2 cursor-pointer"  ><span className='flex justify-center items-center gap-3' id='1'>Age<FaSort size={12} color='gray'/> </span></th>
             <th onClick={handleSort}  className="p-2 cursor-pointer"  ><span className='flex justify-center items-center gap-3' id='2'>Position<FaSort size={12} color='gray'/> </span></th>
@@ -141,14 +163,20 @@ export default function EmployeeTable() {
                 tableData1.slice(page*5,page*5+5).map((item, index) =>{
                     return (
                         <tr key={index} className=" text-center rows">
-                            <td >{item.firstName +' '+ item.lastName}</td>
+                            
+                                <td >
+                                <Link to={`../employee/${item._id}`} >{item.firstName +' '+ item.lastName} </Link></td>
+                           
                             <td >{item.age}</td>
                             <td >{item.position}</td>
                             <td >{item.department}</td>
                             <td >{item.joiningDate}</td>
                             <td >   {item.salary.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</td>
                             <td  className='space-x-2'>
+                                <Link to={`../edit/${item._id}`}>
                                 <button className="border border-green-500 bg-green-500 text-white rounded-md px-2 py-1 transition duration-500 ease select-none hover:bg-green-600 focus:outline-none focus:shadow-outline">Edit</button>
+                                </Link>
+                                
                                 
                                 <button className="border border-red-500 bg-red-500 text-white rounded-md px-2 py-1 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline">Delete</button>
                             </td>
@@ -165,11 +193,11 @@ export default function EmployeeTable() {
             Total Entries: {tableData1.length}
         </div>
         <div className='space-x-3'>
-            <Link to={'/table/1'} className='p-2 bg-blue-400 rounded'><span>First</span></Link>
-            {page !== 0 && <Link to={`/table/${page}`} className='p-2 bg-blue-400 rounded'><span>Pre</span></Link>}
-            <Link to={`/table/${page+1}`} className='p-2 bg-blue-400 rounded'><span>{page+1}</span></Link>
-            {page < Math.floor(tableData1.length/5) && <Link to={`/table/${page+2}`} className='p-2 bg-blue-400 rounded'><span>Next</span></Link>}
-            <Link to={`/table/${Math.ceil(tableData1.length/5)}`} className='p-2 bg-blue-400 rounded'><span>Last</span></Link>
+            <span className='p-2 bg-blue-400 rounded cursor-pointer' onClick={()=> setPage(0)}>First</span>
+            { page > 0 && <span className='p-2 bg-blue-400 rounded cursor-pointer' onClick={()=> setPage(page-1)}>Pre</span>}
+            <span className='p-2 bg-blue-400 rounded cursor-pointer'>{page+1}</span>
+            {page < Math.ceil(tableData1.length/5 -1) && <span className='p-2 bg-blue-400 rounded cursor-pointer' onClick={()=> setPage(page+1)}>Next</span>}
+            <span className='p-2 bg-blue-400 rounded cursor-pointer' onClick={()=> setPage( Math.ceil(tableData1.length/5 -1))}>Last</span>
         </div>
         <div>
         <Link to='/add'><button className='bg-blue-500 text-white p-2 rounded'>Add Employee</button></Link>

@@ -2,14 +2,14 @@
 
 import { Link } from "react-router-dom";
 
-export default function Login(){
+export default function LoginAdmin(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         
         const {email, password} = e.target;
         const user = {email: email.value, password: password.value}
         console.log(user)
-        const res = await fetch('/api/login', {
+        const res = await fetch('/api/admin/login', {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(user)
@@ -20,7 +20,7 @@ export default function Login(){
             alert("Login Successful")
         //    window.location.href = '/'
         }else{
-            alert("Login Failed" + res.json() + res.status + res.statusText + res.body)
+            alert("Login Failed")
         }
         
 
@@ -31,7 +31,7 @@ export default function Login(){
     
     <div className="bg-[#F9FAFB] h-screen w-screen flex items-center">
         <div className="h-max mx-auto flex flex-col items-center">
-            <h1 className="text-xl font-bold text-center pb-10">Login to your account</h1>
+            <h1 className="text-xl font-bold text-center pb-10">Login as Admin</h1>
             
             <div className="bg-white shadow-xl p-10 flex flex-col text-sm">
             <form className="space-y-3" method="POST" onSubmit={handleSubmit}>
@@ -55,7 +55,7 @@ export default function Login(){
                 <div>
                     <input className="bg-[#3c35b8] w-full py-2 rounded-md text-white font-bold cursor-pointer hover:bg-[#181196]" type="submit" value="Login" />
                 </div>
-                <div className="text-center">Login as Admin. <Link to={'../admin'} className="text-blue-700">Here.</Link> </div>
+                <div className="text-center">Login as Employee. <Link to={'/login'} className="text-blue-700">Here.</Link> </div>
                 </form>
             </div>
             

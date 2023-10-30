@@ -1,23 +1,16 @@
 import { Link, Outlet } from "react-router-dom"
-import { useEffect, useState } from "react"
-import EmployeeData from './EmployeeData'
 
 export default function HomeLayout() {
-    const [tableData, setTableData] = useState([])
-    const getEmployeeData = async () => {
-        let data = await EmployeeData()
-        setTableData(data)
-    }
+    
+    
     const navItems = [
         { name: 'Home', path: '/' },
-        { name: 'Employees', path: '/table' },
-        { name: 'Departments', path: '/departments' },
+        { name: 'Employees', path: '/employees' },
+        { name: 'Login', path: '/login' },
         { name: 'Roles', path: '/roles' },
     ]
-    useEffect(() => {
-        getEmployeeData()
-    }, [])
-    return (
+
+     return (
         <>
             <header>
                 <div className="text-center bg-gray-800 text-white text-lg py-3 font-semibold">
@@ -40,7 +33,7 @@ export default function HomeLayout() {
                     </div>
                     <section className="w-5/6 bg-gray-100 overflow-auto ">
                     <div className="w-full  px-2 flex justify-start items-center">
-                    <Outlet data={tableData} />
+                    <Outlet/>
                     </div>
                        
                     </section>
